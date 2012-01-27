@@ -1,0 +1,17 @@
+{
+  "name": "video-sync",
+  "description": "Video synchronization proof of concept",
+  "version": "1.0.0",
+  "author": "Noah H. Smith <nsmith@rendergardenmedia.com>",
+  "contributors": [
+    { "name": "Noah H. Smith", "email": "nsmith@rendergardenmedia.com" }
+  ],
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/noazark/video-sync"
+  },
+  "dependencies": {
+    "socket.io": "0.8.7"
+  },
+  "keywords": ["video", "synchronization", "realtime", "socket.io", "node.js"]
+}

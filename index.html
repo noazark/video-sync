@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>Video Sync</title>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      $(function() {
+        var socket = io.connect()
+          , video = $("video").get(0)
+          , _id = 17
+          , _master = false
+
+        socket.on('assigned', function (data) {
+          console.log('assigned ' + data);
+          _id = data;
+        });
+
+        video.addEventListener('click', function () {
+          if(!video.paused) {
+            socket.emit('pause', {
+              id: _id,
+              currentTime: video.currentTime,
+              sent_at: new Date().getTime()
+            });
+          } else {
+            socket.emit('play', {
+              id: _id,
+              currentTime: video.currentTime,
+              sent_at: new Date().getTime()
+            });
+          } 
+        });
+
+        socket.on('play', function (data) {
+          console.log('play');
+          update(data);
+          video.play();
+        });
+
+        socket.on('pause', function (data) {
+          console.log('pause');
+          update(data);
+          video.pause();
+        });
+
+        var update = function (data) {
+          var now = new Date().getTime()
+            , currentTime = video.currentTime
+            , playTime = data.currentTime + ((now - data.sent_at) * 0.0001)
+          video.currentTime = playTime;
+        }
+      });
+    </script>
+
+  </head>
+  <body>
+
+    <video id="video" loop>
+      <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4" /><!-- Safari / iOS video    -->
+      <source src="http://clips.vorwaerts-gmbh.de/VfE.webm" type="video/webm" /><!-- Firefox / Opera / Chrome10 -->
+    </video>
+
+  </body>
+</html>
